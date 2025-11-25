@@ -9,7 +9,6 @@ export const ProjectsSection = () => {
       description: "Award Winning Sleep Pod Designed and Built by Our Team.",
       images: [
         "/DSC_4358.jpg",
-        "/8.JPG",
         "/bo-hotel-5-680x495.jpg",
         "/DSC_4297.jpg",
         "/IMG_0035.jpg",
