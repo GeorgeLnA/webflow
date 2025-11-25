@@ -28,7 +28,6 @@ const HowItWorksSection = lazy(() =>
 const ContactCTASection = lazy(() =>
   import("./MainPageCTASection").then((m) => ({ default: m.ContactCTASection }))
 );
-const Benefits = lazy(() => import("./Benefits").then((m) => ({ default: m.default })));
 
 export const Background = () => {
   const [showRest, setShowRest] = useState(false);
@@ -46,13 +45,12 @@ export const Background = () => {
         <Suspense fallback={null}>
           <ProductCategoriesSection />
           <WhoIsThisForSection />
-          <ProjectsSection />
           <WhatsIncludedSection />
           <InstallAndUse />
           <WhyUsSection />
           <WhyNowSection />
           <HowItWorksSection />
-          <Benefits />
+          <ProjectsSection />
           <ContactCTASection />
         </Suspense>
       )}
