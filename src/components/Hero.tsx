@@ -167,7 +167,7 @@ const Hero = () => {
       {/* Background Image */}
       <img
         className="absolute inset-0 w-full h-full object-cover object-top lg:object-center z-0 -top-40 lg:top-0"
-        src="/6_Photo - 1 (2).jpg"
+        src="/Gemini_Generated_Image_221u17221u17221u Large.jpeg"
         alt="Infinite Spa luxury wellness experience"
       />
 

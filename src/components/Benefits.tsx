@@ -40,23 +40,23 @@ const Benefits = () => {
     <section id="benefits" className="py-16 lg:py-24 bg-[#0b1c26]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="max-w-4xl">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white mb-6 lg:mb-8 leading-tight text-center lg:text-left">
-            Benefits
-          </h2>
-          
-          <div className="space-y-6 lg:space-y-8">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-normal text-white mb-6 lg:mb-8 leading-tight text-center lg:text-left">
+              Benefits
+            </h2>
+            
+            <div className="space-y-6 lg:space-y-8">
             {benefits.map((benefit, index) => (
-              <div key={index} className="group border-l-2 border-white/30 pl-4 lg:pl-6">
-                <div>
-                  <h3 className="text-lg lg:text-xl font-medium text-white mb-2 transition-colors">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-sm lg:text-base text-white/80 leading-relaxed">
-                    {benefit.description}
-                  </p>
+                <div key={index} className="group border-l-2 border-white/30 pl-4 lg:pl-6">
+                  <div>
+                    <h3 className="text-lg lg:text-xl font-medium text-white mb-2 transition-colors">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-sm lg:text-base text-white/80 leading-relaxed">
+                      {benefit.description}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>
