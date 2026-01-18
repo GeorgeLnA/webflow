@@ -54,46 +54,56 @@ const saveToSupabase = async (
 ): Promise<FormSubmissionResult> => {
   try {
     let submission: {
+      'Form Type': string;
       Name: string;
       Email: string;
       Phone: string | null;
-      'Additional info': string;
+      Location: string | null;
+      'Additional info': string | null;
     };
 
     switch (formType) {
       case 'contact':
         submission = {
+          'Form Type': 'contact',
           Name: formData.name?.trim() || '',
           Email: formData.email?.trim() || '',
           Phone: formData.phone?.trim() || null,
-          'Additional info': `Form Type: Contact\nProject Description: ${formData.projectDescription?.trim() || 'N/A'}`
+          Location: null,
+          'Additional info': `Project Description: ${formData.projectDescription?.trim() || 'N/A'}`
         };
         break;
       
       case 'dealer':
         submission = {
+          'Form Type': 'dealer',
           Name: `${formData.firstName?.trim() || ''} ${formData.lastName?.trim() || ''}`.trim(),
           Email: formData.email?.trim() || '',
           Phone: formData.phone?.trim() || null,
-          'Additional info': `Form Type: Dealer\nCompany: ${formData.company?.trim() || 'N/A'}\nZip: ${formData.zipCode?.trim() || 'N/A'}\nCountry: ${formData.country?.trim() || 'N/A'}\nOnline Only: ${formData.onlineOnly?.trim() || 'N/A'}`
+          Location: formData.country?.trim() || null,
+          'Additional info': `Company: ${formData.company?.trim() || 'N/A'}\nZip: ${formData.zipCode?.trim() || 'N/A'}\nCountry: ${formData.country?.trim() || 'N/A'}\nOnline Only: ${formData.onlineOnly?.trim() || 'N/A'}`
         };
         break;
       
       case 'booking':
         submission = {
+          'Form Type': 'booking',
           Name: formData.name?.trim() || 'Booking Inquiry',
           Email: formData.email?.trim() || 'booking@infinitespa.co',
           Phone: formData.phone?.trim() || null,
-          'Additional info': `Form Type: Booking\nMessage: ${formData.message?.trim() || 'Booking consultation request'}`
+          Location: null,
+          'Additional info': `Message: ${formData.message?.trim() || 'Booking consultation request'}`
         };
         break;
       
       case 'hero':
         submission = {
+          'Form Type': 'hero',
           Name: formData.name?.trim() || '',
           Email: formData.email?.trim() || '',
           Phone: formData.phone?.trim() || null,
-          'Additional info': `Form Type: Hero\nLocation: ${formData.location?.trim() || 'Not specified'}`
+          Location: formData.location?.trim() || null,
+          'Additional info': null
         };
         break;
       
@@ -102,7 +112,7 @@ const saveToSupabase = async (
     }
 
     const { data, error } = await supabase
-      .from('infinitespa_all_leads')
+      .from('infinitespa_dealer_submissions')
       .insert([submission]);
 
     if (error) {

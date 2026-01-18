@@ -36,7 +36,7 @@ const Admin = () => {
       try {
         console.log('Testing Supabase connection...');
         const { data, error } = await supabase
-          .from('infinitespa_all_leads')
+          .from('infinitespa_dealer_submissions')
           .select('count', { count: 'exact' });
         
         console.log('Connection test result:', { data, error });
@@ -50,16 +50,14 @@ const Admin = () => {
 
   // Helper function to map database format to FormSubmission format
   const mapDatabaseToFormSubmission = (dbRow: any): FormSubmission => {
-    // Extract form_type from "Additional info" field
+    // Get form_type from "Form Type" column (normalize to 'hero' | 'contact' for compatibility)
+    const formTypeColumn = dbRow['Form Type'] || '';
     let formType: 'hero' | 'contact' = 'contact';
-    const additionalInfo = dbRow['Additional info'] || '';
-    if (additionalInfo.includes('Form Type: Hero')) {
+    if (formTypeColumn.toLowerCase() === 'hero') {
       formType = 'hero';
-    } else if (additionalInfo.includes('Form Type: Dealer')) {
-      formType = 'contact'; // Map dealer to contact for display
-    } else if (additionalInfo.includes('Form Type: Booking')) {
-      formType = 'contact'; // Map booking to contact for display
     }
+
+    const additionalInfo = dbRow['Additional info'] || '';
 
     return {
       id: dbRow.id?.toString() || '',
@@ -67,9 +65,7 @@ const Admin = () => {
       name: dbRow.Name || '',
       email: dbRow.Email || '',
       phone: dbRow.Phone || '',
-      location: additionalInfo.includes('Location:') 
-        ? additionalInfo.match(/Location:\s*([^\n]+)/)?.[1]?.trim() || ''
-        : '',
+      location: dbRow.Location || '',
       project_description: additionalInfo || '',
       created_at: dbRow.Added || dbRow.Added?.toString() || ''
     };
@@ -80,9 +76,9 @@ const Admin = () => {
       setLoading(true);
       console.log('Fetching submissions from Supabase...');
       
-      // Query the correct table with correct column names
+      // Query the infinitespa_dealer_submissions table
       const { data, error } = await supabase
-        .from('infinitespa_all_leads')
+        .from('infinitespa_dealer_submissions')
         .select('*')
         .order('Added', { ascending: false });
 
@@ -190,7 +186,7 @@ const Admin = () => {
 
       // First, let's check if we can read the submission
       const { data: checkData, error: checkError } = await supabase
-        .from('infinitespa_all_leads')
+        .from('infinitespa_dealer_submissions')
         .select('*')
         .eq('id', submissionToDelete.id)
         .single();
@@ -204,7 +200,7 @@ const Admin = () => {
 
       // Now try to delete
       const { data: deleteData, error: deleteError } = await supabase
-        .from('infinitespa_all_leads')
+        .from('infinitespa_dealer_submissions')
         .delete()
         .eq('id', submissionToDelete.id)
         .select();
@@ -255,7 +251,7 @@ const Admin = () => {
       
       // Test read permission
       const { data: readData, error: readError } = await supabase
-        .from('infinitespa_all_leads')
+        .from('infinitespa_dealer_submissions')
         .select('*')
         .limit(1);
       
@@ -273,7 +269,7 @@ const Admin = () => {
       
       // Test delete permission by trying to delete a non-existent record
       const { data: deleteData, error: deleteError } = await supabase
-        .from('infinitespa_all_leads')
+        .from('infinitespa_dealer_submissions')
         .delete()
         .eq('id', '00000000-0000-0000-0000-000000000000')
         .select();
@@ -282,7 +278,7 @@ const Admin = () => {
       
       // Check RLS policies
       const { data: policies, error: policiesError } = await supabase
-        .rpc('get_table_policies', { table_name: 'infinitespa_all_leads' });
+        .rpc('get_table_policies', { table_name: 'infinitespa_dealer_submissions' });
       
       console.log('🔒 RLS Policies:', { policies, policiesError });
       
